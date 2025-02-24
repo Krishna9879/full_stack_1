@@ -139,8 +139,6 @@ app.patch('/unfollow-coin', async (req, res) => {
 });
 
 // GET request to check if a user follows a crypto coin
-
-
 app.get('/check-follow-status', async (req, res) => {
     try {
         const { userId, coinName } = req.query;
@@ -162,5 +160,27 @@ app.get('/check-follow-status', async (req, res) => {
         res.status(200).json({ followsCoin });
     } catch (err) {
         res.status(500).json({ error: 'Error checking follow status' });
+    }
+});
+
+// GET request to fetch followed communities for a user
+app.get('/followed-communities', async (req, res) => {
+    try {
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'User ID is required' });
+        }
+
+        // Find the user by ID
+        const user = await USERS.findOne({ _id: new ObjectId(userId) });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json({ followedCoins: user.followedCoins });
+    } catch (err) {
+        res.status(500).json({ error: 'Error fetching followed communities' });
     }
 });
