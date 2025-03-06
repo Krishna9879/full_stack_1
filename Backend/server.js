@@ -184,3 +184,4 @@ app.get('/followed-communities', async (req, res) => {
         res.status(500).json({ error: 'Error fetching followed communities' });
     }
 });
+
